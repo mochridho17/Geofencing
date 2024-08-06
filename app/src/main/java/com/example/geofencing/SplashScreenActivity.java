@@ -1,16 +1,25 @@
 package com.example.geofencing;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.example.geofencing.auth.LoginActivity;
 import com.example.geofencing.databinding.ActivitySpashScreenBinding;
+import com.example.geofencing.services.NetworkChangeReceiver;
+import com.example.geofencing.ui.parent.MainActivity;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
 
     ActivitySpashScreenBinding binding;
+    private NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +30,36 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        networkChangeReceiver = new NetworkChangeReceiver(this);
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         new Handler().postDelayed(() -> {
-            // Intent is used to switch from one activity to another.
-            Intent i = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i); // invoke the SecondActivity.
-            finish(); // the current activity will get finished.
+            if (isConnectedToInternet()) {
+                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(SplashScreenActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
+            }
         }, 1500);
 
+    }
+
+    private boolean isConnectedToInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    @Override
+    public void onNetworkChange(boolean isConnected) {
+        if (isConnected) {
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            // Tampilkan pesan kesalahan
+            Toast.makeText(SplashScreenActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
+        }
     }
 }
