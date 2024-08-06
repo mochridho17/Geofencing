@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_user">
+
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="com.example.geofencing.ui.parent.user.UserFragment"
+        android:label="@string/akun"
+        tools:layout="@layout/fragment_user" />
+
+    <fragment
+        android:id="@+id/navigation_polygons"
+        android:name="com.example.geofencing.ui.parent.polygons.PolygonsFragment"
+        android:label="@string/area"
+        tools:layout="@layout/fragment_polygons">
+        <action
+            android:id="@+id/action_navigation_dashboard_to_detailMapFragment"
+            app:destination="@id/navigation_detail_map" />
+        <action
+            android:id="@+id/action_navigation_polygons_to_addPolygonMapsFragment"
+            app:destination="@id/addPolygonMapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_detail_map"
+        android:name="com.example.geofencing.ui.parent.polygons.DetailPolygonFragment"
+        android:label="@string/detail_area"
+        tools:layout="@layout/fragment_add_polygon_maps">
+        <action
+            android:id="@+id/action_DetailAreaFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_polygons" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_childs"
+        android:name="com.example.geofencing.ui.parent.childs.ChildsFragment"
+        android:label="@string/anak"
+        tools:layout="@layout/fragment_childs" >
+        <action
+            android:id="@+id/action_navigation_home_to_addChildFragment"
+            app:destination="@id/addChildFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_trackChildMapsFragment"
+            app:destination="@id/trackChildMapsFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_childLocationHistoryFragment"
+            app:destination="@id/childLocationHistoryFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_listChildPolygonFragment"
+            app:destination="@id/listChildPolygonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addChildFragment"
+        android:name="com.example.geofencing.ui.parent.childs.AddChildFragment"
+        android:label="@string/add_child"
+        tools:layout="@layout/fragment_add_child" >
+        <action
+            android:id="@+id/action_addChildFragment_to_navigation_home"
+            app:destination="@id/navigation_childs" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackChildMapsFragment"
+        android:name="com.example.geofencing.ui.parent.childs.TrackChildMapsFragment"
+        android:label="Lokasi Anak"
+        tools:layout="@layout/fragment_track_child_maps" >
+        <action
+            android:id="@+id/action_trackChildMapsFragment_to_navigation_home"
+            app:destination="@id/navigation_childs" />
+    </fragment>
+    <fragment
+        android:id="@+id/childLocationHistoryFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ChildLocationHistoryFragment"
+        android:label="Riwayat Lokasi Anak"
+        tools:layout="@layout/fragment_child_location_history" />
+    <fragment
+        android:id="@+id/listChildPolygonFragment"
+        android:name="com.example.geofencing.ui.parent.childs.ListChildPolygonFragment"
+        android:label="@string/daftar_area_anak"
+        tools:layout="@layout/fragment_list_child_polygon" />
+    <fragment
+        android:id="@+id/addPolygonMapsFragment"
+        android:name="com.example.geofencing.ui.parent.polygons.addPolygonMapsFragment"
+        android:label="Tambah Area"
+        tools:layout="@layout/fragment_add_polygon_maps" >
+        <action
+            android:id="@+id/action_addPolygonMapsFragment_to_navigation_polygons"
+            app:destination="@id/navigation_polygons" />
+    </fragment>
+</navigation>

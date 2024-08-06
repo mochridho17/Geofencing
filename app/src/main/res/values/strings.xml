@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Mona</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_child">Child</string>
+    <string name="title_dashboard">Area</string>
+    <string name="title_user">Akun</string>
+    <string name="title_child_management">Child Management</string>
+    <string name="google_map_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDCM0gMyC9oVbrpMTRyUvC06Iz79BUKrkw</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_child">Tambahkan Anak</string>
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="enter_pair_code">Masukan kode</string>
+    <string name="pair">Pair</string>
+    <string name="enter_area_name">Nama Area</string>
+    <string name="save">Simpan</string>
+    <string name="map">Maps</string>
+    <string name="maps">Maps</string>
+    <string name="enter_email">Masukkan Email</string>
+    <string name="reset">Kirim</string>
+    <string name="pilih_polygon">Pilih Polygon</string>
+    <string name="login_sebagai_orang_tua">Login sebagai orang tua</string>
+    <string name="login_sebagai_anak">Login sebagai anak</string>
+    <string name="hubungkan_dengan_orang_tua">Hubungkan dengan orang tua</string>
+    <string name="masukkan_pair_code">Masukkan pair code</string>
+    <string name="masuk">Masuk</string>
+    <string name="daftar">Daftar</string>
+    <string name="simpan">Simpan</string>
+    <string name="masukkan_nama_polygon">Masukkan Nama Polygon</string>
+    <string name="polygon">Polygon</string>
+    <string name="anak">Anak</string>
+    <string name="akun">Akun</string>
+    <string name="masukkan_kode_pairing">Masukkan kode pairing</string>
+    <string name="area">Area</string>
+    <string name="detail_area">Detail Area</string>
+    <string name="daftar_area_anak">Daftar Area Anak</string>
+    <string name="pilih_area">Pilih Area</string>
+</resources>
