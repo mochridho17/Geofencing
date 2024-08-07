@@ -1,5 +1,6 @@
 package com.example.geofencing.auth;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,10 +20,13 @@ import com.example.geofencing.dialog.ForgotPasswordDialog;
 import com.example.geofencing.util.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.example.geofencing.helper.StringHelper;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -128,12 +132,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        onAuthSuccess(task.getResult().getUser());
+                        isParent(Auth.getUid(), new ParentCheckCallback() {
+                            @Override
+                            public void onResult(boolean isParent) {
+                                if (isParent) {
+                                    onAuthSuccess(task.getResult().getUser());
+                                } else {
+                                    Auth.signOut();
+                                    Toast.makeText(LoginActivity.this, "Akun ini bukan akun orang tua",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(LoginActivity.this, "Error",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(LoginActivity.this, "Email/Password Salah",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private interface ParentCheckCallback {
+        void onResult(boolean isParent);
+        void onError();
+    }
+
+    private void isParent(String uuId, ParentCheckCallback callback) {
+        DB.child("users").child(uuId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    callback.onResult(true);
+                } else {
+                    callback.onResult(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+                callback.onResult(false);
+            }
+        });
     }
 
     // Sign Up action

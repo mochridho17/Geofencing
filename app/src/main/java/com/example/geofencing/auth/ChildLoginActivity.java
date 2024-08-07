@@ -66,9 +66,16 @@ public class ChildLoginActivity extends AppCompatActivity {
                                 if (isChild) {
                                     onAuthSuccess(task.getResult().getUser());
                                 } else {
+                                    Auth.signOut();
                                     Toast.makeText(ChildLoginActivity.this, "Akun ini bukan akun anak",
                                             Toast.LENGTH_SHORT).show();
                                 }
+                            }
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(ChildLoginActivity.this, "Error",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
@@ -99,6 +106,7 @@ public class ChildLoginActivity extends AppCompatActivity {
     }
     public interface ChildCheckCallback {
         void onResult(boolean isChild);
+        void onError();
     }
     private void onAuthSuccess(FirebaseUser user) {
         // Create User If Not Exist
