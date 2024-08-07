@@ -54,23 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         binding.loginSignupBtn.setOnClickListener(this);
         binding.loginSubmitBtn.setOnClickListener(this);
 
-
-//        if (sf.getPref("pair_code", LoginActivity.this) != null) {
-//            Intent intent = new Intent(LoginActivity.this, ChildActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//        // Check if user is logged in
-//        if (Auth.getCurrentUser() != null) {
-//            Toast.makeText(LoginActivity.this, "Already logged in",
-//                    Toast.LENGTH_SHORT).show();
-//
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
-//            finish();
-//        }
-
         binding.btnPairCode.setOnClickListener(v -> createDialog());
         binding.txtForgotPassword.setOnClickListener(v -> {
             forgotPassword();
@@ -176,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error if needed
-                callback.onResult(false);
+                callback.onError();
             }
         });
     }
