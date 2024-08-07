@@ -156,7 +156,7 @@ public class TrackChildMapsFragment extends Fragment {
                         marker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(lat, lng))
                                 .title(name)
-                                .icon(bitmapDescriptorFromVector(getContext(), R.drawable.baseline_circle_24)));
+                                .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.baseline_circle_24)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
                         mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
 
