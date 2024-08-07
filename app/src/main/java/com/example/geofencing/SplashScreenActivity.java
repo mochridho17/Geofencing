@@ -33,16 +33,6 @@ public class SplashScreenActivity extends AppCompatActivity implements NetworkCh
         networkChangeReceiver = new NetworkChangeReceiver(this);
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-        new Handler().postDelayed(() -> {
-            if (isConnectedToInternet()) {
-                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(SplashScreenActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
-            }
-        }, 1500);
-
     }
 
     private boolean isConnectedToInternet() {
@@ -54,11 +44,12 @@ public class SplashScreenActivity extends AppCompatActivity implements NetworkCh
     @Override
     public void onNetworkChange(boolean isConnected) {
         if (isConnected) {
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+                finish();
+            }, 2000);
         } else {
-            // Tampilkan pesan kesalahan
             Toast.makeText(SplashScreenActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_LONG).show();
         }
     }
