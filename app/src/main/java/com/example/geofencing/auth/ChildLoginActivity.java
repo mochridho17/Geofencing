@@ -5,16 +5,21 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geofencing.Config;
 import com.example.geofencing.databinding.ActivityChildLoginBinding;
+import com.example.geofencing.dialog.ChildInfo;
 import com.example.geofencing.ui.child.ChildActivity;
 import com.example.geofencing.util.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ChildLoginActivity extends AppCompatActivity {
 
@@ -55,8 +60,17 @@ public class ChildLoginActivity extends AppCompatActivity {
         Auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        onAuthSuccess(task.getResult().getUser());
-                        sf.setPref("pair_code", Auth.getUid(), ChildLoginActivity.this);
+                        isChild(Auth.getUid(), new ChildCheckCallback() {
+                            @Override
+                            public void onResult(boolean isChild) {
+                                if (isChild) {
+                                    onAuthSuccess(task.getResult().getUser());
+                                } else {
+                                    Toast.makeText(ChildLoginActivity.this, "Akun ini bukan akun anak",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     } else {
                         Toast.makeText(this, "Gagal masuk",
                                 Toast.LENGTH_SHORT).show();
@@ -65,6 +79,27 @@ public class ChildLoginActivity extends AppCompatActivity {
 
     }
 
+    private void isChild(String uuId, ChildCheckCallback callback) {
+        DB.child("childs").child(uuId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    callback.onResult(true);
+                } else {
+                    callback.onResult(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+                callback.onResult(false);
+            }
+        });
+    }
+    public interface ChildCheckCallback {
+        void onResult(boolean isChild);
+    }
     private void onAuthSuccess(FirebaseUser user) {
         // Create User If Not Exist
 //        DBHelper.saveUser(DB, user.getUid(), name, user.getEmail());
