@@ -101,7 +101,7 @@ public class LocationService extends Service {
         }
     };
 
-    private void getPolygons(String childId) {
+    public void getPolygons(String childId) {
         DatabaseReference polygonRef = FirebaseDatabase.getInstance(Config.getDB_URL()).getReference("childs").child(childId).child("polygons");
 
         polygonRef.addValueEventListener(new ValueEventListener() {
@@ -178,6 +178,7 @@ public class LocationService extends Service {
                 fcmTokenList.clear();
                 dataSnapshot.getChildren().forEach(dataSnapshot1 -> {
                     fcmTokenList.add(new FcmToken(dataSnapshot1.getValue(String.class)));
+                    Log.d(TAG, "onDataChange: "+dataSnapshot1.getValue(String.class));
                 });
             }
 
@@ -192,8 +193,9 @@ public class LocationService extends Service {
     public void onCreate() {
         super.onCreate();
         sp = new SharedPreferencesUtil(this);
-        DB = FirebaseDatabase.getInstance(Config.getDB_URL()).getReference();
         Auth = FirebaseAuth.getInstance();
+        DB = FirebaseDatabase.getInstance(Config.getDB_URL()).getReference();
+
 
         getPolygons(Auth.getUid());
         getFcmToken();
@@ -247,11 +249,10 @@ public class LocationService extends Service {
     }
 
     private void saveLocationHistoryToFirebase(String message) {
-        String pairCode = sp.getPref("pair_code", this);
 
         DBHelper.saveLocationHistory2(
                 DB,
-                pairCode,
+                Auth.getUid(),
                 message);
 
     }
